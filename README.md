@@ -1,15 +1,13 @@
-Below is a progress document you can drop into docs/progress_2025-11-15.md or share in Slack / Notion with your team.
+# Campus Activity Recommender – Progress Summary (as of 2025-11-15)
 
----
+# 1. Overview
 
-Campus Activity Recommender – Progress Summary (as of 2025-11-15)
+We are building a campus activity / club recommender where students (especially freshmen) can swipe through clubs and events, similar to a dating app UI:
+• Students swipe right (like) or left (dislike) on clubs.
+• The backend learns from swipes and improves recommendations over time.
+• We plan to integrate with Google Calendar API later so users can see/join events in their calendar.
+So far, we have:
 
-1. Overview
-   We are building a campus activity / club recommender where students (especially freshmen) can swipe through clubs and events, similar to a dating app UI:
-   • Students swipe right (like) or left (dislike) on clubs.
-   • The backend learns from swipes and improves recommendations over time.
-   • We plan to integrate with Google Calendar API later so users can see/join events in their calendar.
-   So far, we have:
 1. A working Flask backend skeleton with a database and migrations.
 1. A unified tag vocabulary for user interests and club categories.
 1. A feature engineering pipeline that converts (user, club) into a fixed-length vector.
@@ -17,53 +15,55 @@ Campus Activity Recommender – Progress Summary (as of 2025-11-15)
 
 ---
 
-2. Backend Stack & Project Structure (High-level)
-   • Framework: Flask
-   • Database: SQLite (via SQLAlchemy)
-   • Migrations: Flask-Migrate (Alembic)
-   • Virtual environment: campus_match_env
-   Key files / directories:
-   • run.py – Flask entry point, create_app() factory.
-   • app/**init**.py – App factory, extension initialization.
-   • app/extensions.py – SQLAlchemy, Migrate instances.
-   • app/models.py – User, Club, Swipe models.
-   • app/recommendation/ – Recommendation-related code:
-   o vocab.py – shared tag vocabulary.
-   o utils.py – tag parsing helpers.
-   o features.py – feature vector builder.
-   o linucb.py – LinUCB agent implementation.
-   • scripts/ – helper scripts:
-   o seed.py – seed Users and Clubs.
-   o test_features.py – sanity check for feature vectors.
-   o test_linucb.py – sanity check for LinUCB behavior.
+## 2. Backend Stack & Project Structure (High-level)
+
+- Framework: FastAPI
+- Database: SQLite (via SQLAlchemy)
+- Migrations: Flask-Migrate (Alembic)
+
+### Key files / directories:
+
+- `main.py`
+  <!-- - app/extensions.py – SQLAlchemy, Migrate instances. -->
+  <!-- - app/models.py – User, Club, Swipe models. -->
+- `app/recommendation/` (Recommendation-related code):
+   <!-- - vocab.py – shared tag vocabulary.
+   - utils.py – tag parsing helpers.
+   - features.py – feature vector builder.
+   - linucb.py – LinUCB agent implementation.
+   - scripts/ – helper scripts:
+   - seed.py – seed Users and Clubs.
+   - test_features.py – sanity check for feature vectors.
+   - test_linucb.py – sanity check for LinUCB behavior. -->
 
 ---
 
-3. Data Model
-   Current tables:
-   User
-   • id (int, PK)
-   • email (string, unique, required)
-   • name (string, optional)
-   • year (string, e.g. "freshman", "sophomore", …)
-   • major (string, optional)
-   • interests (text, e.g. "academic_stem_tech,gaming,creative_arts")
-   • created_at (datetime)
-   Club
-   • id (int, PK)
-   • name (string, required)
-   • description (text)
-   • tags (text, e.g. "service,activism_environment")
-   • meeting_time (string, e.g. "Tue 18:00")
-   • location (string)
-   • created_at (datetime)
-   Swipe
-   • id (int, PK)
-   • user_id (FK → User.id)
-   • club_id (FK → Club.id)
-   • liked (boolean, True = like/right swipe, False = dislike/left swipe)
-   • created_at (datetime)
-   Swipe will be the main source of reward data for the bandit algorithm.
+## 3. Data Model
+
+Current tables:
+User
+• id (int, PK)
+• email (string, unique, required)
+• name (string, optional)
+• year (string, e.g. "freshman", "sophomore", …)
+• major (string, optional)
+• interests (text, e.g. "academic_stem_tech,gaming,creative_arts")
+• created_at (datetime)
+Club
+• id (int, PK)
+• name (string, required)
+• description (text)
+• tags (text, e.g. "service,activism_environment")
+• meeting_time (string, e.g. "Tue 18:00")
+• location (string)
+• created_at (datetime)
+Swipe
+• id (int, PK)
+• user_id (FK → User.id)
+• club_id (FK → Club.id)
+• liked (boolean, True = like/right swipe, False = dislike/left swipe)
+• created_at (datetime)
+Swipe will be the main source of reward data for the bandit algorithm.
 
 ---
 
@@ -235,7 +235,7 @@ This confirms that:
 
 source campus_match_env/bin/activate
 
-# Initialize / reset DB (only needed once or when schema/seed changes)
+<!-- # Initialize / reset DB (only needed once or when schema/seed changes)
 
 flask db upgrade
 python -m scripts.seed
@@ -246,16 +246,22 @@ python -m scripts.test_features
 
 # Test LinUCB behavior
 
-python -m scripts.test_linucb
+python -m scripts.test_linucb -->
 
 # Run the Flask dev server
 
-python run.py
+```
+# run in dev mode
+uv run fastapi dev app/api/main.py
+```
 
 ---
 
-9. Next Steps
-   Suggested next steps for the recommendation & backend side:
+<!--
+# 9. Next Steps
+
+Suggested next steps for the recommendation & backend side:
+
 1. API integration for recommendation
    o Implement an endpoint like GET /api/recommend:
     Input: current user ID (from session or query param)
@@ -489,3 +495,4 @@ python run.py
     Clubs (as now)
     Upcoming events from those clubs
    o Explore using LinUCB or a separate bandit for events vs clubs.
+-->

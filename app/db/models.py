@@ -1,9 +1,20 @@
-from .. import db
-from datetime import datetime
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from datetime import datetime, timezone
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    is_verified = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(unique=True, nullable=False)
+    password_hash: Mapped[str]
+    is_verified: Mapped[bool] 
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
+
+class Club(Base):
+    __tablename__ = 'clubs'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[str | None]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
+
