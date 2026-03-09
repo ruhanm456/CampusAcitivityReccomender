@@ -1,7 +1,10 @@
-from fastapi import FastAPI
-from db.models import Session, User
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from db.models import User
+from typing import Annotated
 
 app = FastAPI()
+= Session
 
 @app.get("/")
 def root():
