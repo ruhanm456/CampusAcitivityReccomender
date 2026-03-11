@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 .venv
-
-# Caches
+.vscode
+.pytest_cache
 **/__pycache__
