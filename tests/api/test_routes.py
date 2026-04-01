@@ -1,6 +1,5 @@
-import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker
+from fastapi.testclient import TestClient
+from app.api.main import app
 
-db = sa.create_engine('sqlite:///:memory:') # todo: replace connection
-Session = sessionmaker(bind=db) 
+client = TestClient(app)
 
