@@ -1,0 +1,16 @@
+id,host_id,name,description,time,location
+1,1,Robotics Kickoff,Intro meeting for new members,2024-04-01T17:00:00Z,Engineering Hall 110
+2,3,Entrepreneur Night,Pitch practice and networking,2024-04-02T18:00:00Z,Business Center 303
+3,5,Film Editing Workshop,Hands-on editing session,2024-04-03T19:00:00Z,Library Room B12
+4,4,Spring Hike,Group hike through local trails,2024-04-04T09:00:00Z,Recreation Field A
+5,7,Campus LAN Party,All-night gaming event,2024-04-05T20:00:00Z,Innovation Hub
+6,6,Volunteer Day,Community cleanup event,2024-04-06T10:00:00Z,Campus Café
+7,9,Cultural Food Festival,Food from around the world,2024-04-07T17:00:00Z,Auditorium 1
+8,10,Research Symposium,Student research presentations,2024-04-08T14:00:00Z,Science Lab 4
+9,12,Finance 101,Intro to investing,2024-04-09T16:00:00Z,Business Center 201
+10,14,Esports Tournament,Competitive gaming bracket,2024-04-10T18:00:00Z,Innovation Hub
+11,15,Debate Night,Team debate event,2024-04-11T19:00:00Z,Library Room C10
+12,16,Spring Concert,Student music showcase,2024-04-12T20:00:00Z,Auditorium 2
+13,18,Film Screening,Weekly movie night,2024-04-13T18:00:00Z,Auditorium 3
+14,19,Trail Cleanup,Outdoor cleanup event,2024-04-14T09:00:00Z,Recreation Field B
+15,20,Startup Pitch Day,Student startup presentations,2024-04-15T17:00:00Z,Innovation Hub

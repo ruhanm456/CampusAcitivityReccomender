@@ -1,0 +1,21 @@
+id,name,description,tags,location,created_at
+1,Robotics Club,Hands-on robotics builds and competitions,"STEM,Academic",Engineering Hall 110,2024-03-01T12:00:00Z
+2,Art Collective,Creative workshops and showcases,"Arts,Cultural",Arts Building 2F,2024-03-02T12:00:00Z
+3,Business Leaders Society,Entrepreneurship and networking,"Business,Academic",Business Center 303,2024-03-03T12:00:00Z
+4,Outdoor Adventures,Hiking and nature exploration,"Outdoors,Sports",Recreation Field A,2024-03-04T12:00:00Z
+5,Media Production Club,Film and audio creation,"Media,Arts",Library Room B12,2024-03-05T12:00:00Z
+6,Community Service Corps,Volunteer projects,"Community Service,Cultural",Campus Café,2024-03-06T12:00:00Z
+7,Gaming Guild,Weekly gaming tournaments,"Gaming,STEM",Innovation Hub,2024-03-07T12:00:00Z
+8,Sports Analytics Group,Data-driven sports analysis,"Sports,STEM",Engineering Hall 110,2024-03-08T12:00:00Z
+9,Cultural Exchange Club,Global culture events,"Cultural,Arts",Auditorium 1,2024-03-09T12:00:00Z
+10,Science Research Forum,Student research presentations,"STEM,Academic",Science Lab 4,2024-03-10T12:00:00Z
+11,Photography Circle,Photography outings and editing,"Arts,Media",Arts Building 1A,2024-03-11T12:00:00Z
+12,Finance Club,Investing and markets discussions,"Business,Academic",Business Center 201,2024-03-12T12:00:00Z
+13,Environmental Action Group,Sustainability projects,"Outdoors,Community Service",Campus Green,2024-03-13T12:00:00Z
+14,Esports Team,Competitive gaming,"Gaming,Sports",Innovation Hub,2024-03-14T12:00:00Z
+15,Debate Union,Weekly debates and tournaments,"Academic,Media",Library Room C10,2024-03-15T12:00:00Z
+16,Music Ensemble,Student music performances,"Arts,Cultural",Auditorium 2,2024-03-16T12:00:00Z
+17,Math Society,Math problem solving,"STEM,Academic",Science Lab 2,2024-03-17T12:00:00Z
+18,Film Club,Weekly movie screenings,"Media,Arts",Auditorium 3,2024-03-18T12:00:00Z
+19,Hiking Club,Weekend hikes,"Outdoors,Sports",Recreation Field B,2024-03-19T12:00:00Z
+20,Entrepreneurship Hub,Startup idea workshops,"Business,STEM",Innovation Hub,2024-03-20T12:00:00Z
