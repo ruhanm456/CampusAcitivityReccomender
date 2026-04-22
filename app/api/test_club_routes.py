@@ -40,6 +40,42 @@ def test_create_club_happy_path(client):
     assert body["id"] > 0
     assert body["name"] == "Testing Club"
 
+def test_create_club_with_new_fields(client):
+    payload = {
+        "name": "Expanded Club",
+        "description": "Club with extended metadata",
+        "tags": "sports,outdoors",
+        "meeting_time": "Tue 18:00",
+        "location": "Building A Room 101",
+        "members_count": 12,
+    }
+    res = client.post("/clubs", json=payload)
+    assert res.status_code == 201
+    body = res.json()
+    assert body["name"] == "Expanded Club"
+    assert body["tags"] == "sports,outdoors"
+    assert body["meeting_time"] == "Tue 18:00"
+    assert body["location"] == "Building A Room 101"
+    assert body["members_count"] == 12
+
+def test_update_club_with_new_fields(client):
+    club = create_club(client, "Update Club", None).json()
+    res = client.put(
+        f"/clubs/{club['id']}",
+        json={
+            "tags": "academic,community",
+            "meeting_time": "Wed 19:30",
+            "location": "Community Center",
+            "members_count": 30,
+        },
+    )
+    assert res.status_code == 200
+    body = res.json()
+    assert body["tags"] == "academic,community"
+    assert body["meeting_time"] == "Wed 19:30"
+    assert body["location"] == "Community Center"
+    assert body["members_count"] == 30
+
 def test_create_club_invalid_payload(client):
     res = client.post("/clubs", json={"name": "", "description": ""})
     assert res.status_code == 422
