@@ -4,6 +4,8 @@ import ChatWindow from "./pages/ChatWindow";
 import Home from "./pages/Home";
 import SignupForm from "./pages/SignUp";
 
+export const SERVER_URL = "http://127.0.0.1:8000";
+
 function App() {
   return (
     <BrowserRouter>

@@ -1,7 +1,77 @@
+import re
+from datetime import datetime, timedelta, timezone
+from typing import Optional
+
 from fastapi import FastAPI, APIRouter, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+import bcrypt
+import jwt
+
+from app.db.models import Base, User
+from config import Config
 
 router = APIRouter()
+
+# Pydantic models for registration
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+    year: Optional[str] = None
+    major: Optional[str] = None
+    interests: Optional[list[str]] = None
+
+class RegisterResponse(BaseModel):
+    access_token: str
+    user: dict
+
+def validate_password(password: str) -> bool:
+    """Validate password is at least 8 characters"""
+    return len(password) >= 8
+
+def create_access_token(user_id: int, email: str) -> str:
+    """Create JWT access token"""
+    expire = datetime.now(timezone.utc) + timedelta(days=7)
+    payload = {
+        "sub": str(user_id),
+        "email": email,
+        "exp": expire
+    }
+    return jwt.encode(payload, Config.SECRET_KEY, algorithm="HS256")
+
+@router.post("/register", response_model=RegisterResponse)
+async def register(data: RegisterRequest):   
+    # Validate password length
+    if not validate_password(data.password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 8 characters"
+        )
+    
+    # Note: In production, check database for email uniqueness
+    # For now, we'll simulate the check - in real implementation,
+    # query the database for existing email
+    
+    # Hash the password
+    password_hash = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    # Create user (in real implementation, insert into database)
+    # This is a placeholder - actual DB insertion would happen here
+    user_id = 1  # Would be returned from DB insert
+    
+    # Generate JWT token
+    access_token = create_access_token(user_id, data.email)
+    
+    return RegisterResponse(
+        access_token=access_token,
+        user={
+            "id": user_id,
+            "email": data.email,
+            "name": data.name,
+            "year": data.year,
+            "interests": data.interests or []
+        }
+    )
 
 @router.post("/login")
 async def login(email: str, password: str):

@@ -1,7 +1,12 @@
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 
+from app.api.user_routes import router as user_router
+
 app = FastAPI()
+
+# Include user routes under /api/auth
+app.include_router(user_router, prefix="/api/auth", tags=["auth"])
 
 # User data model (Input format)
 class LoginRequest(BaseModel):
