@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.exc import IntegrityError, StatementError
 
-from app.db.models import Base, User, Club, ClubOwner, ClubMember, Event 
+from app.db.models import Base, User, Club, ClubOwner, ClubMember, Event, Collaboration
 
 
 @pytest.fixture
@@ -96,6 +96,7 @@ class TestOwnership:
         owner1 = ClubOwner(club_id=sample_club.id, user_id=sample_user.id)
         db_session.add(owner1)
         db_session.commit()
+        db_session.expunge(owner1)
         
         # Try to add duplicate
         owner2 = ClubOwner(club_id=sample_club.id, user_id=sample_user.id)
@@ -192,6 +193,7 @@ class TestMembership:
         member1 = ClubMember(club_id=sample_club.id, user_id=sample_user.id)
         db_session.add(member1)
         db_session.commit()
+        db_session.expunge(member1)
         
         # Try to add duplicate
         member2 = ClubMember(club_id=sample_club.id, user_id=sample_user.id)
@@ -382,6 +384,7 @@ class TestCollaboration:
         collab1 = Collaboration(event_id=event.id, club_id=sample_club.id)
         db_session.add(collab1)
         db_session.commit()
+        db_session.expunge(collab1)
         
         # Try to add duplicate
         collab2 = Collaboration(event_id=event.id, club_id=sample_club.id)

@@ -40,18 +40,42 @@ class Club(Base):
         secondary="club_owners", back_populates="owned_clubs"
     )
     hosted_events: Mapped[list["Event"]] = relationship(
-        back_populates="host_club", cascade="all, delete-orphan", foreign_keys="Event.host"
+        back_populates="host_club",
+        cascade="all, delete-orphan",
+        foreign_keys="Event.host",
+    )
+    collaborations: Mapped[list["Collaboration"]] = relationship(
+        "Collaboration",
+        back_populates="club",
+        cascade="all, delete-orphan",
     )
 
 class Event(Base):
     __tablename__ = 'events'
     id: Mapped[int] = mapped_column(primary_key=True)
-    host_id: Mapped[int] = mapped_column(ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
+    host: Mapped[int] = mapped_column(ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]
     time: Mapped[datetime] = mapped_column(nullable=False)
     location: Mapped[str | None]
-    host_club: Mapped["Club"] = relationship(back_populates="hosted_events")
-    collaborations: Mapped[list[int]] = relationship(
-        foreign_keys="Club.id", cascade="all, delete-orphan"
+    host_club: Mapped["Club"] = relationship(
+        back_populates="hosted_events",
+        foreign_keys=[host],
     )
+    collaborations: Mapped[list["Collaboration"]] = relationship(
+        "Collaboration",
+        back_populates="event",
+        cascade="all, delete-orphan",
+    )
+
+
+class Collaboration(Base):
+    __tablename__ = "event_collaborations"
+    event_id: Mapped[int] = mapped_column(
+        ForeignKey("events.id", ondelete="CASCADE"), primary_key=True
+    )
+    club_id: Mapped[int] = mapped_column(
+        ForeignKey("clubs.id", ondelete="CASCADE"), primary_key=True
+    )
+    event: Mapped["Event"] = relationship(back_populates="collaborations")
+    club: Mapped["Club"] = relationship(back_populates="collaborations")
