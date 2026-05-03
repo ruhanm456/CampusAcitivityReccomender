@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 import { SERVER_URL } from "../App";
 
@@ -13,19 +13,20 @@ const REDIRECT = "/verify-email";
 export default function SignupForm() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const res = await fetch(`${SERVER_URL}/user/create/`, {
+      const res = await fetch(`${SERVER_URL}/auth/register/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data: SignupResponse = await res.json();
@@ -49,6 +50,13 @@ export default function SignupForm() {
         className="w-80 p-6 rounded-xl bg-base-200 shadow-xl flex flex-col gap-4"
       >
         <h2 className="text-xl font-bold text-center">Create Account</h2>
+        <input
+          placeholder="Chosen Name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="input input-bordered w-full"
+        />
 
         <input
           type="email"

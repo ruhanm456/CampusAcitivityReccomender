@@ -39,7 +39,7 @@ def create_access_token(user_id: int, email: str) -> str:
     }
     return jwt.encode(payload, Config.SECRET_KEY, algorithm="HS256")
 
-@router.post("/register", response_model=RegisterResponse)
+@router.put("/register", response_model=RegisterResponse)
 async def register(data: RegisterRequest):   
     # Validate password length
     if not validate_password(data.password):
@@ -48,15 +48,12 @@ async def register(data: RegisterRequest):
             detail="Password must be at least 8 characters"
         )
     
-    # Note: In production, check database for email uniqueness
-    # For now, we'll simulate the check - in real implementation,
-    # query the database for existing email
-    
+    # todo: check for email uniqueness
+
     # Hash the password
     password_hash = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     
-    # Create user (in real implementation, insert into database)
-    # This is a placeholder - actual DB insertion would happen here
+    # todo: insert actual user
     user_id = 1  # Would be returned from DB insert
     
     # Generate JWT token

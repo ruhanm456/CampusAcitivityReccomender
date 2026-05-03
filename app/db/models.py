@@ -16,5 +16,6 @@ class Club(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[str | None]
+    location: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
 
