@@ -1,8 +1,15 @@
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, UniqueConstraint, Text
+from enum import Enum as PyEnum
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship, synonym
+from sqlalchemy import ForeignKey, UniqueConstraint, Text, Enum as SQLEnum
 from datetime import datetime, timezone
 
 Base = declarative_base()
+
+class VisibilityMode(PyEnum):
+    public = "public"
+    members_only = "members_only"
+    domain_allowlist = "domain_allowlist"
+    domain_blocklist = "domain_blocklist"
 
 class User(Base):
     __tablename__ = 'users'
@@ -40,9 +47,9 @@ class Club(Base):
         secondary="club_owners", back_populates="owned_clubs"
     )
     hosted_events: Mapped[list["Event"]] = relationship(
-        back_populates="host_club",
+        back_populates="club",
         cascade="all, delete-orphan",
-        foreign_keys="Event.host",
+        foreign_keys="Event.club_id",
     )
     collaborations: Mapped[list["Collaboration"]] = relationship(
         "Collaboration",
@@ -53,14 +60,27 @@ class Club(Base):
 class Event(Base):
     __tablename__ = 'events'
     id: Mapped[int] = mapped_column(primary_key=True)
-    host: Mapped[int] = mapped_column(ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
-    name: Mapped[str] = mapped_column(nullable=False)
+    club_id: Mapped[int] = mapped_column(ForeignKey("clubs.id", ondelete="CASCADE"), nullable=False)
+    host = synonym("club_id")
+    title: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]
-    time: Mapped[datetime] = mapped_column(nullable=False)
+    start_time: Mapped[datetime] = mapped_column(nullable=False)
+    end_time: Mapped[datetime] = mapped_column(nullable=True)
     location: Mapped[str | None]
-    host_club: Mapped["Club"] = relationship(
+    is_online: Mapped[bool] = mapped_column(default=False, nullable=False)
+    join_link: Mapped[str | None] = mapped_column(Text, nullable=True)
+    capacity: Mapped[int] = mapped_column(default=0, nullable=False)
+    visibility_mode: Mapped[VisibilityMode] = mapped_column(
+        SQLEnum(VisibilityMode, name="visibility_mode"), nullable=False, default=VisibilityMode.public
+    )
+    visible_email_domains: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc)
+    )
+    club: Mapped["Club"] = relationship(
         back_populates="hosted_events",
-        foreign_keys=[host],
+        foreign_keys=[club_id],
     )
     collaborations: Mapped[list["Collaboration"]] = relationship(
         "Collaboration",
