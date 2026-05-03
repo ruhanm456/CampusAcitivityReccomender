@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.exc import IntegrityError, StatementError
 
-from app.db.models import Base, User, Club, ClubOwner, ClubMember, Event 
+from app.db.models import Base, User, Club, ClubOwner, ClubMember, Event, Collaboration
 
 
 @pytest.fixture
@@ -96,6 +96,7 @@ class TestOwnership:
         owner1 = ClubOwner(club_id=sample_club.id, user_id=sample_user.id)
         db_session.add(owner1)
         db_session.commit()
+        db_session.expunge(owner1)
         
         # Try to add duplicate
         owner2 = ClubOwner(club_id=sample_club.id, user_id=sample_user.id)
@@ -192,6 +193,7 @@ class TestMembership:
         member1 = ClubMember(club_id=sample_club.id, user_id=sample_user.id)
         db_session.add(member1)
         db_session.commit()
+        db_session.expunge(member1)
         
         # Try to add duplicate
         member2 = ClubMember(club_id=sample_club.id, user_id=sample_user.id)
@@ -226,9 +228,10 @@ class TestEvents:
         """
         event = Event(
             host=9999,  # Non-existent club
-            name="Test Event",
+            title="Test Event",
             description="A test event",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
             location="Room 101",
         )
         db_session.add(event)
@@ -243,15 +246,16 @@ class TestEvents:
         """
         event = Event(
             host=sample_club.id,
-            name="Tech Talk",
+            title="Tech Talk",
             description="A tech talk event",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
             location="Auditorium",
         )
         db_session.add(event)
         db_session.commit()
         
-        retrieved_event = db_session.query(Event).filter_by(name="Tech Talk").first()
+        retrieved_event = db_session.query(Event).filter_by(title="Tech Talk").first()
         assert retrieved_event is not None
         assert retrieved_event.host == sample_club.id
     
@@ -263,9 +267,10 @@ class TestEvents:
         # Create an event hosted by the club
         event = Event(
             host=sample_club.id,
-            name="Test Event",
+            title="Test Event",
             description="Event to be cascaded",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
             location="Room 101",
         )
         db_session.add(event)
@@ -308,8 +313,11 @@ class TestCollaboration:
         # Create an event hosted by sample_club
         event = Event(
             host=sample_club.id,
-            name="Collaborative Event",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            title="Collaborative Event",
+            description=None,
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
+            location=None,
         )
         db_session.add(event)
         db_session.commit()
@@ -353,8 +361,11 @@ class TestCollaboration:
         """
         event = Event(
             host=sample_club.id,
-            name="Test Event",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            title="Test Event",
+            description=None,
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
+            location=None,
         )
         db_session.add(event)
         db_session.commit()
@@ -373,8 +384,11 @@ class TestCollaboration:
         # Create event and collaboration
         event = Event(
             host=sample_club.id,
-            name="Test Event",
-            time=datetime.now(timezone.utc) + timedelta(days=1),
+            title="Test Event",
+            description=None,
+            start_time=datetime.now(timezone.utc) + timedelta(days=1),
+            end_time=None,
+            location=None,
         )
         db_session.add(event)
         db_session.commit()
@@ -382,6 +396,7 @@ class TestCollaboration:
         collab1 = Collaboration(event_id=event.id, club_id=sample_club.id)
         db_session.add(collab1)
         db_session.commit()
+        db_session.expunge(collab1)
         
         # Try to add duplicate
         collab2 = Collaboration(event_id=event.id, club_id=sample_club.id)
@@ -437,8 +452,11 @@ class TestSchema:
         with pytest.raises(Exception):  # Could be IntegrityError or StatementError
             event = Event(
                 host=None,
-                name="No Host Event",
-                time=datetime.now(timezone.utc),
+                title="No Host Event",
+                description=None,
+                start_time=datetime.now(timezone.utc),
+                end_time=None,
+                location=None,
             )
             db_session.add(event)
             db_session.commit()
@@ -484,8 +502,11 @@ class TestCascadeDelete:
         
         event = Event(
             host=sample_club.id,
-            name="Collaborative Event",
-            time=datetime.now(timezone.utc),
+            title="Collaborative Event",
+            description=None,
+            start_time=datetime.now(timezone.utc),
+            end_time=None,
+            location=None,
         )
         db_session.add(event)
         db_session.commit()

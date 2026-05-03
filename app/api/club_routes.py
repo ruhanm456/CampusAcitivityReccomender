@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from app.db.db import get_db
+from app.db import get_db
 from app.db.models import Club
 from datetime import datetime
 from typing import Annotated, Literal
