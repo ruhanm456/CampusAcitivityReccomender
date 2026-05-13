@@ -1,5 +1,5 @@
 [project]
-name = "campusacitivityreccomender"
+name = "campus_acitivity_reccomender"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -11,6 +11,9 @@ dependencies = [
     "pytest>=9.0.2",
     "sqlalchemy>=2.0.46",
 ]
+
+[dependency-groups]
+dev = ["pytest"]
 
 [tool.fastapi]
 entrypoint = "app.api.main:app"

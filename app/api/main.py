@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+abb = FastAPI()
 
 allowed_origins = ["http://localhost:5173"]
 
-app.add_middleware(
+abb.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
@@ -16,9 +16,9 @@ app.add_middleware(
 
 # Import Routes
 from app.api.user_routes import router as user_router
-app.include_router(user_router, prefix="/auth", tags=["auth"])
+abb.include_router(user_router, prefix="/auth", tags=["auth"])
 
-@app.get("/")
+@abb.get("/")
 async def root():
     # Load test data or perform any startup tasks here
     # load_test_data()
@@ -62,5 +62,12 @@ def check_test_data():
     from app.db import get_db
 
     session = next(get_db())
-    users = session.execute(select(User))
-    print(f'{len(users)} were loaded in.')
+    users = session.execute(select(User)).scalars().all()
+    print("Users:")
+    for user in users:
+        print(user)
+    clubs = session.execute(select(Club)).scalars().all()
+    print("Clubs:")
+    for club in clubs:
+        print(club)
+    session.close()

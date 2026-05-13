@@ -99,7 +99,7 @@ wheels = [
 ]
 
 [[package]]
-name = "campusacitivityreccomender"
+name = "campus-acitivity-reccomender"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
@@ -110,6 +110,11 @@ dependencies = [
     { name = "sqlalchemy" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
@@ -118,6 +123,9 @@ requires-dist = [
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "sqlalchemy", specifier = ">=2.0.46" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest" }]
 
 [[package]]
 name = "certifi"

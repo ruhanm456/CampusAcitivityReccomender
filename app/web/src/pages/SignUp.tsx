@@ -5,7 +5,6 @@ import { SERVER_URL } from "../App";
 interface SignupResponse {
   message?: string;
   error?: string;
-  verify?: boolean;
 }
 
 const REDIRECT = "/verify-email";
