@@ -8,7 +8,7 @@ import UserProfile from "./UserProfile";
 
 describe("UserProfile", () => {
   beforeEach(() => {
-    global.fetch = vi.fn(() =>
+    globalThis.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () =>
@@ -21,6 +21,10 @@ describe("UserProfile", () => {
             joined_clubs: [
               { id: 101, name: "Robotics Club" },
               { id: 102, name: "AI Society" },
+            ],
+            recent_events: [
+              { id: 201, title: "Hackathon Kickoff", date: "2026-05-01" },
+              { id: 202, title: "AI Study Group", date: "2026-04-22" },
             ],
             medal_count: 3,
             event_attendance_count: 12,
@@ -49,8 +53,11 @@ describe("UserProfile", () => {
     expect(screen.getByText("AI")).toBeTruthy();
     expect(screen.getByText("Robotics Club")).toBeTruthy();
     expect(screen.getByText("AI Society")).toBeTruthy();
-    expect(screen.getByText("3")).toBeTruthy();
+    expect(screen.getByText("2 clubs")).toBeTruthy();
     expect(screen.getByText("12")).toBeTruthy();
+    expect(screen.getByText("3 medals")).toBeTruthy();
+    expect(screen.getByText("Hackathon Kickoff")).toBeTruthy();
+    expect(screen.getByText("AI Study Group")).toBeTruthy();
   });
 
   it("shows edit fields and saves updated profile", async () => {
@@ -79,12 +86,16 @@ describe("UserProfile", () => {
             major: "Computer Engineering",
             interests: ["Robotics", "AI", "Leadership"],
             joined_clubs: [{ id: 101, name: "Robotics Club" }],
+            recent_events: [
+              { id: 201, title: "Hackathon Kickoff", date: "2026-05-01" },
+              { id: 202, title: "AI Study Group", date: "2026-04-22" },
+            ],
             medal_count: 3,
             event_attendance_count: 12,
           }),
       } as Response);
 
-    global.fetch = fetchMock as unknown as typeof fetch;
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
 
     render(
       <MemoryRouter initialEntries={["/users/1"]}>

@@ -15,6 +15,11 @@ sample_users = [
             {"id": 101, "name": "Robotics Club"},
             {"id": 102, "name": "AI Society"},
         ],
+        "recent_events": [
+            {"id": 201, "title": "Hackathon Kickoff", "date": "2026-05-01"},
+            {"id": 202, "title": "AI Study Group", "date": "2026-04-22"},
+            {"id": 203, "title": "Campus Volunteer Fair", "date": "2026-04-10"},
+        ],
         "medal_count": 3,
         "event_attendance_count": 12,
         "email": "alice@example.com",
@@ -29,6 +34,10 @@ sample_users = [
         "joined_clubs": [
             {"id": 103, "name": "Debate Club"},
             {"id": 104, "name": "Peer Support Network"},
+        ],
+        "recent_events": [
+            {"id": 204, "title": "Debate Tournament", "date": "2026-03-18"},
+            {"id": 205, "title": "Peer Support Training", "date": "2026-03-05"},
         ],
         "medal_count": 1,
         "event_attendance_count": 5,
@@ -46,6 +55,7 @@ def get_public_user(user: dict) -> dict:
         "major": user["major"],
         "interests": user["interests"],
         "joined_clubs": user["joined_clubs"],
+        "recent_events": user.get("recent_events", []),
         "medal_count": user["medal_count"],
         "event_attendance_count": user["event_attendance_count"],
     }
