@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 from enum import Enum as PyEnum
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship, synonym
 from sqlalchemy import ForeignKey, UniqueConstraint, Text, Enum as SQLEnum
+=======
+>>>>>>> de069c8 (Tag vocabulary, user view point updated)
 from datetime import datetime, timezone
+
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column
 
 Base = declarative_base()
 
@@ -13,10 +18,14 @@ class VisibilityMode(PyEnum):
 
 class User(Base):
     __tablename__ = 'users'
+
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
-    password_hash: Mapped[str]
-    is_verified: Mapped[bool] 
+    password_hash: Mapped[str] = mapped_column(nullable=False)
+    is_verified: Mapped[bool] = mapped_column(default=False)
+    name: Mapped[str | None] = mapped_column(nullable=True)
+    year: Mapped[str | None] = mapped_column(nullable=True)
+    interests: Mapped[str | None] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
     owned_clubs: Mapped[list["Club"]] = relationship(
         secondary="club_owners", back_populates="owners"
@@ -34,7 +43,11 @@ class ClubMember(Base):
 
 class Club(Base):
     __tablename__ = 'clubs'
+<<<<<<< HEAD
     __table_args__ = (UniqueConstraint("name", name="uq_club_name"),)
+=======
+
+>>>>>>> de069c8 (Tag vocabulary, user view point updated)
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]

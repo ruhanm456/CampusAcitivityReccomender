@@ -9,4 +9,5 @@ dependencies = [
     "loguru>=0.7.3",
     "pytest>=9.0.2",
     "sqlalchemy>=2.0.46",
+    "werkzeug>=3.0.0",
 ]
