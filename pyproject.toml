@@ -11,7 +11,6 @@ dependencies = [
     "pyjwt>=2.12.1",
     "pytest>=9.0.2",
     "sqlalchemy>=2.0.46",
-    "werkzeug>=3.0.0",
 ]
 
 [dependency-groups]

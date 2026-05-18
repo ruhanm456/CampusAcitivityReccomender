@@ -71,10 +71,8 @@ class Event(Base):
     host = synonym("club_id")
     title: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]
+    event_date: Mapped[datetime] # todo: change name
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
-    updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc)
-    )
     club: Mapped["Club"] = relationship(
         back_populates="hosted_events",
         foreign_keys=[club_id],
@@ -84,7 +82,6 @@ class Event(Base):
         back_populates="event",
         cascade="all, delete-orphan",
     )
-
 
 class Collaboration(Base):
     __tablename__ = "event_collaborations"
