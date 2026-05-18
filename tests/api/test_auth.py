@@ -1,56 +1,59 @@
 from fastapi.testclient import TestClient
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from werkzeug.security import generate_password_hash
+from bcrypt import hashpw, gensalt
 
-from CampusActivityReccomender.app.api.main import app, get_db
-from CampusActivityReccomender.app.db.models import Base, User
+from app.api.main import app
+from app.db.models import User
+from app.db import get_db
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URI,
-    connect_args={"check_same_thread": False},
-    future=True,
-)
-TestingSessionLocal = sessionmaker(
-    bind=engine,
-    autoflush=False,
-    autocommit=False,
-    expire_on_commit=False,
-)
-
-
-def override_get_db():
+@pytest.fixture
+def override_db():
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URI,
+        connect_args={"check_same_thread": False},
+        future=True,
+    )
+    TestingSessionLocal = sessionmaker(
+        bind=engine,
+        autoflush=False,
+        autocommit=False,
+        expire_on_commit=False,
+    )
     db = TestingSessionLocal()
     try:
         yield db
     finally:
         db.close()
 
+@pytest.fixture
+def client(override_db):
+    # Override Any Dependencies
+    app.dependency_overrides[get_db] = override_db
+    client = TestClient(app)
+    yield client
+    app.dependency_overrides.clear()
 
-app.dependency_overrides[get_db] = override_get_db
-client = TestClient(app)
-
-
-def setup_module(module):
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
+@pytest.fixture
+def example_users(override_db):
     try:
-        db.add(
+        override_db.add(
             User(
                 email="alice@example.com",
-                password_hash=generate_password_hash("password123"),
+                password_hash=hashpw("password123".encode('uft-8'), gensalt()),
                 name="Alice Zhang",
                 year="Sophomore",
                 interests="Robotics,AI",
             )
         )
-        db.commit()
+        override_db.commit()
     finally:
-        db.close()
+        override_db.close()
 
 
-def test_login_success_returns_token_and_user():
+def test_login_success_returns_token_and_user(client):
     response = client.post(
         "/api/auth/login",
         json={"email": "alice@example.com", "password": "password123"},
@@ -66,7 +69,7 @@ def test_login_success_returns_token_and_user():
     assert data["user"]["interests"] == ["Robotics", "AI"]
 
 
-def test_login_invalid_password_returns_401():
+def test_login_invalid_password_returns_401(client):
     response = client.post(
         "/api/auth/login",
         json={"email": "alice@example.com", "password": "wrong-pass"},
@@ -76,7 +79,7 @@ def test_login_invalid_password_returns_401():
     assert response.json()["detail"] == "Invalid email or password"
 
 
-def test_login_invalid_email_returns_401():
+def test_login_invalid_email_returns_401(client):
     response = client.post(
         "/api/auth/login",
         json={"email": "unknown@example.com", "password": "password123"},

@@ -1,4 +1,4 @@
-id,email,password,created_at
+id,email,password_hash,created_at
 1,user1@test.com,hashed_pw_1,2024-01-01T12:00:00Z
 2,user2@test.com,hashed_pw_2,2024-01-02T12:00:00Z
 3,user3@test.com,hashed_pw_3,2024-01-03T12:00:00Z
