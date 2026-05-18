@@ -1,13 +1,21 @@
 [project]
-name = "campusacitivityreccomender"
+name = "campus_acitivity_reccomender"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "bcrypt>=5.0.0",
     "fastapi[standard]>=0.128.0",
     "loguru>=0.7.3",
+    "pyjwt>=2.12.1",
     "pytest>=9.0.2",
     "sqlalchemy>=2.0.46",
     "werkzeug>=3.0.0",
 ]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.fastapi]
+entrypoint = "app.api.main:app"

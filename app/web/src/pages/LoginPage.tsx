@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     // Send data to the server
-    const response = await fetch('http://localhost:8000/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("http://localhost:8000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
@@ -19,33 +19,33 @@ function LoginPage() {
     if (response.ok) {
       alert("Login successful! Token: " + result.token);
       // You can save the token in localStorage here
-      localStorage.setItem('token', result.token);
+      localStorage.setItem("token", result.token);
     } else {
       alert("Error: " + result.detail);
     }
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Campus Activity Recommender - Login</h2>
       <form onSubmit={handleLogin}>
         <div>
-          <input 
-            type="email" 
-            placeholder="Your Email" 
+          <input
+            type="email"
+            placeholder="Your Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
         <div>
-          <input 
-            type="password" 
-            placeholder="Password" 
+          <input
+            type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
