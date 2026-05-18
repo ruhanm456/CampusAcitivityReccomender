@@ -6,6 +6,12 @@ type Club = {
   name: string;
 };
 
+type EventAttendance = {
+  id: number;
+  title: string;
+  date: string;
+};
+
 type UserProfileData = {
   id: number;
   name: string;
@@ -13,6 +19,7 @@ type UserProfileData = {
   major: string;
   interests: string[];
   joined_clubs: Club[];
+  recent_events: EventAttendance[];
   medal_count: number;
   event_attendance_count: number;
   avatar_data?: string;
@@ -240,16 +247,75 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-3xl border border-base-200 bg-base-200 p-4">
-              <p className="text-sm uppercase text-base-content/50">Medals</p>
-              <p className="text-2xl font-semibold">{profile.medal_count}</p>
+              <p className="text-sm uppercase text-base-content/50">Member of</p>
+              <p className="text-2xl font-semibold">{profile.joined_clubs.length} clubs</p>
             </div>
             <div className="rounded-3xl border border-base-200 bg-base-200 p-4">
               <p className="text-sm uppercase text-base-content/50">Events attended</p>
               <p className="text-2xl font-semibold">{profile.event_attendance_count}</p>
             </div>
+            <div className="rounded-3xl border border-base-200 bg-base-200 p-4">
+              <p className="text-sm uppercase text-base-content/50">Earned</p>
+              <p className="text-2xl font-semibold">{profile.medal_count} medals</p>
+            </div>
           </div>
+        </div>
+
+        <div className="mt-8 grid gap-8">
+          <section className="rounded-3xl border border-base-200 bg-base-100 p-6">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold">Joined Clubs</h2>
+                <p className="text-sm text-base-content/70">
+                  Explore the clubs this user is part of.
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {profile.joined_clubs.map((club) => (
+                <Link
+                  key={club.id}
+                  to={`/clubs/${club.id}`}
+                  className="rounded-3xl border border-base-200 bg-base-100 p-5 transition hover:border-primary"
+                >
+                  <h3 className="text-lg font-semibold">{club.name}</h3>
+                  <p className="text-sm text-base-content/70">View club details</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-base-200 bg-base-100 p-6">
+            <div className="mb-5">
+              <h2 className="text-xl font-semibold">Recent Events Attended</h2>
+              <p className="text-sm text-base-content/70">
+                Last 10 attended events with dates.
+              </p>
+            </div>
+            {profile.recent_events.length === 0 ? (
+              <p className="text-base-content/70">No recent events found.</p>
+            ) : (
+              <div className="space-y-4">
+                {profile.recent_events.slice(0, 10).map((event) => (
+                  <div
+                    key={event.id}
+                    className="rounded-3xl border border-base-200 bg-base-200 p-4"
+                  >
+                    <p className="font-semibold">{event.title}</p>
+                    <p className="text-sm text-base-content/70">
+                      {new Date(event.date).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
         </div>
 
         {isEditing ? (
