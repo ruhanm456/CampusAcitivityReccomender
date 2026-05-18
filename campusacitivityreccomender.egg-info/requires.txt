@@ -1,0 +1,5 @@
+bcrypt>=5.0.0
+fastapi[standard]>=0.128.0
+pyjwt>=2.12.1
+pytest>=9.0.2
+sqlalchemy>=2.0.46

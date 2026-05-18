@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+app/__init__.py
+app/api/__init__.py
+app/api/main.py
+app/api/user_routes.py
+app/db/__init__.py
+app/db/models.py
+app/web/node_modules/flatted/python/flatted.py
+campusacitivityreccomender.egg-info/PKG-INFO
+campusacitivityreccomender.egg-info/SOURCES.txt
+campusacitivityreccomender.egg-info/dependency_links.txt
+campusacitivityreccomender.egg-info/requires.txt
+campusacitivityreccomender.egg-info/top_level.txt
