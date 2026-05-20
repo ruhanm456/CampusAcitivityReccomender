@@ -1,8 +1,11 @@
-from datetime import datetime, timezone
 from enum import Enum as PyEnum
 
 from sqlalchemy import Enum as SQLEnum, ForeignKey, Text, UniqueConstraint
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship, synonym
+from sqlalchemy import ForeignKey, UniqueConstraint, Text, Enum as SQLEnum
+from datetime import datetime, timezone
+
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column
 
 Base = declarative_base()
 
@@ -18,11 +21,12 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
-    is_verified: Mapped[bool] = mapped_column(default=False)
     name: Mapped[str | None] = mapped_column(nullable=True)
     year: Mapped[str | None] = mapped_column(nullable=True)
+    major: Mapped[str | None] = mapped_column(nullable=True)
     interests: Mapped[str | None] = mapped_column(nullable=True)
-    created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    is_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
     owned_clubs: Mapped[list["Club"]] = relationship(
         secondary="club_owners", back_populates="owners"
     )
@@ -64,7 +68,6 @@ class ClubMember(Base):
 class Club(Base):
     __tablename__ = 'clubs'
     __table_args__ = (UniqueConstraint("name", name="uq_club_name"),)
-
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]
@@ -106,17 +109,7 @@ class Event(Base):
     host = synonym("club_id")
     title: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str | None]
-    start_time: Mapped[datetime] = mapped_column(nullable=False)
-    end_time: Mapped[datetime] = mapped_column(nullable=True)
-    location: Mapped[str | None]
-    is_online: Mapped[bool] = mapped_column(default=False, nullable=False)
-    join_link: Mapped[str | None] = mapped_column(Text, nullable=True)
-    capacity: Mapped[int] = mapped_column(default=0, nullable=False)
-    visibility_mode: Mapped[VisibilityMode] = mapped_column(
-        SQLEnum(VisibilityMode, name="visibility_mode"), nullable=False, default=VisibilityMode.public
-    )
-    visible_email_domains: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(
         default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc)
     )
