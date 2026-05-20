@@ -1,8 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from .session import engine, get_db
+from .models import Base
 
-engine = create_engine('sqlite:///:memory:') # todo: replace connection
-
-def get_db():
-  with Session(engine) as session:
-    yield session 
+Base.metadata.create_all(bind=engine)
+ 

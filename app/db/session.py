@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from CampusActivityReccomender.config import Config
+from config import Config
 
 engine_kwargs = {"future": True}
 if Config.SQLALCHEMY_DATABASE_URI.startswith("sqlite"):

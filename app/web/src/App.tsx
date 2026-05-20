@@ -1,6 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ChatWindow from "./pages/ChatWindow";
+import ClubPage from "./pages/ClubPage";
+import EventsFeed from "./pages/EventsFeed";
 import Home from "./pages/Home";
 import SearchUsers from "./pages/SearchUsers";
 import UserProfile from "./pages/UserProfile";
@@ -18,6 +20,8 @@ function App() {
             </div>
           }
         />
+        <Route path="/feed" element={<EventsFeed />} />
+        <Route path="/clubs/:clubId" element={<ClubPage />} />
         <Route path="/users" element={<SearchUsers />} />
         <Route path="/users/:userId" element={<UserProfile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
