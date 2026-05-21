@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { SERVER_URL } from "../App";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
 
     // Send data to the server
-    const response = await fetch("http://localhost:8000/api/login", {
+    const response = await fetch(`${SERVER_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -17,9 +18,9 @@ function LoginPage() {
     const result = await response.json();
 
     if (response.ok) {
-      alert("Login successful! Token: " + result.token);
+      alert("Login successful! Token: " + result.access_token);
       // You can save the token in localStorage here
-      localStorage.setItem("token", result.token);
+      localStorage.setItem("access_token", result.access_token);
     } else {
       alert("Error: " + result.detail);
     }

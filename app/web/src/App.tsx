@@ -5,6 +5,7 @@ import SearchUsers from "./pages/SearchUsers";
 import UserProfile from "./pages/UserProfile";
 import SignupForm from "./pages/SignUp";
 import ClubHome from "./pages/ClubHome";
+import LoginPage from "./pages/LoginPage";
 
 export const SERVER_URL = "http://127.0.0.1:8000";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/users/:userId" element={<UserProfile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/signup" element={<SignupForm />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/clubs/:clubId" element={<ClubHome />} />
       </Routes>
     </BrowserRouter>

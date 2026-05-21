@@ -1,6 +1,6 @@
 /* @vitest-environment happy-dom */
 
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -12,7 +12,6 @@ describe("ClubHome", () => {
   });
 
   afterEach(() => {
-    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -337,8 +336,6 @@ describe("ClubHome", () => {
     expect(screen.getAllByText(/no upcoming events/i).length).toBeGreaterThan(
       0,
     );
-    expect(screen.getAllByText(/no members/i).length).toBeGreaterThan(0
-    );
     expect(screen.getAllByText(/no members/i).length).toBeGreaterThan(0);
   });
 
@@ -356,18 +353,9 @@ describe("ClubHome", () => {
       member_preview: [],
       is_member: false,
     };
+
+    (globalThis.fetch as any)
       .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockClubData),
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve([]),
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ message: "Successfully joined club" }),
-        .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockClubData),
       } as Response)
